@@ -1,12 +1,10 @@
-<?php
-session_start(); 
-?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login page</title>
+    <title>Login page</title>
 
-	<style>
+    <style>
+        /* Giữ nguyên CSS như ban đầu */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -20,7 +18,7 @@ session_start();
             color: white;
         }
         form {
-            background: rgba(0, 0, 0, 0.8); /* Nền form mờ */
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px 30px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
@@ -51,38 +49,55 @@ session_start();
         }
     </style>
 
+    <script>
+        function validateForm() {
+            const username = document.forms["loginForm"]["username"].value;
+            const password = document.forms["loginForm"]["password"].value;
+
+            if (username.trim() === "") {
+                alert("Vui lòng nhập tên người dùng!");
+                return false;
+            }
+
+            if (password.trim() === "") {
+                alert("Vui lòng nhập mật khẩu!");
+                return false;
+            }
+
+            return true; // Nếu không có lỗi, cho phép gửi form
+        }
+    </script>
 </head>
 <body>
-	<form method="POST" action="">
-		UserName : <input type="text" name="username">
-		Password : <input type="password" name="password">
-		<input type="submit" name="login" value="Login">
-	</form>
-	<?php 
-	// B1: Kết nối CSDL
-	$connect = mysqli_connect('localhost','root','','w_login_se06303');
-	if($connect){
-		echo"Kết nối thành công";
-	}
-	else{echo "Kết thất bại";}
-	//B2: XD câu truy vấn
-	if(isset($_POST['login'])){
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		$sql = "SELECT * FROM users WHERE username ='$username' AND password ='$password'";
-		//B3: Thực thi truy vấn
-		$result = mysqli_query($connect, $sql);
-		//B4: Nhận kết quả truy vấn và xử lý
-		$count_rows = mysqli_num_rows($result);
-		if($count_rows==0){
-			echo "<script>alert('Sai tên người dùng hoặc mật khẩu') </script>";
-		}
-		else{
-			echo "<script> alert('Đăng nhập thành công') </script>";
-			echo"<script>window.open('websit_home.php','_self')</script>";
-			       $_SESSION['username'] = $username;
-		}
-	}	
-	?>
+    <form name="loginForm" method="POST" action="" onsubmit="return validateForm()">
+        UserName : <input type="text" name="username">
+        Password : <input type="password" name="password">
+        <input type="submit" name="login" value="Login">
+    </form>
+    <?php 
+    // PHP xử lý đăng nhập
+    $connect = mysqli_connect('localhost','root','','w_login_se06303');
+    if($connect){
+        echo "Kết nối thành công";
+    } else {
+        echo "Kết nối thất bại";
+    }
+
+    if(isset($_POST['login'])){
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $sql = "SELECT * FROM users WHERE username ='$username' AND password ='$password'";
+        $result = mysqli_query($connect, $sql);
+        $count_rows = mysqli_num_rows($result);
+
+        if($count_rows == 0){
+            echo "<script>alert('Sai tên người dùng hoặc mật khẩu')</script>";
+        } else {
+            echo "<script>alert('Đăng nhập thành công')</script>";
+            echo "<script>window.open('websit_home.php','_self')</script>";
+            $_SESSION['username'] = $username;
+        }
+    }    
+    ?>
 </body>
 </html>

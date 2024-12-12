@@ -49,10 +49,40 @@
         }
     </style>
 
+    <script>
+        function validateForm() {
+            const username = document.forms["registerForm"]["username"].value;
+            const password = document.forms["registerForm"]["password"].value;
+            const email = document.forms["registerForm"]["email"].value;
+            // Regular expressions for validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (username.trim() === "") {
+                alert("Vui lòng nhập tên người dùng!");
+                return false;
+            }
+            if (password.trim() === "") {
+                alert("Vui lòng nhập mật khẩu!");
+                return false;
+            }
+            if (password.length < 6) {
+                alert("Mật khẩu phải có ít nhất 6 ký tự!");
+                return false;
+            }
+            if (email.trim() === "") {
+                alert("Vui lòng nhập email!");
+                return false;
+            }
+            if (!emailRegex.test(email)) {
+                alert("Email không đúng định dạng!");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <!-- Form đăng ký -->
-    <form action="" method="POST">
+    <form name="registerForm" action="" method="POST" onsubmit="return validateForm()">
         <h2>Register</h2>
         
         UserName: <input type="text" name="username" required><br>
